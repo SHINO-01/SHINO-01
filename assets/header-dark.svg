@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" fill="none">
+  <style>
+    .mono { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; }
+    .sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    .ink   { fill: #ededed; }
+    .muted { fill: #7d7d7d; }
+    .line  { stroke: #ededed; }
+    .faint { stroke: #363636; }
+    .orbit { transform-origin: 1010px 160px; animation: spin 24s linear infinite; }
+    .cursor { animation: blink 1.2s steps(1) infinite; }
+    .fade { opacity: 0; animation: in 1.4s ease-out forwards; }
+    .d1 { animation-delay: .15s; } .d2 { animation-delay: .45s; } .d3 { animation-delay: .75s; }
+    @keyframes spin  { to { transform: rotate(360deg); } }
+    @keyframes blink { 50% { fill-opacity: 0; } }
+    @keyframes in    { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .orbit, .cursor, .fade { animation: none; opacity: 1; } }
+  </style>
+
+  <!-- label -->
+  <g class="fade d1">
+    <text x="80" y="92" class="mono muted" font-size="18" letter-spacing="4">SHINO-01 / README</text>
+  </g>
+
+  <!-- name -->
+  <g class="fade d2">
+    <text x="76" y="178" class="sans ink" font-size="72" font-weight="300" letter-spacing="-2">Sakif Hussain<tspan class="cursor" dx="6">_</tspan></text>
+  </g>
+
+  <!-- rule + tagline -->
+  <g class="fade d3">
+    <line x1="80" y1="216" x2="140" y2="216" class="line" stroke-width="1.5"/>
+    <text x="80" y="256" class="mono muted" font-size="20" letter-spacing="0.3">i make things i know i won't finish anytime soon.</text>
+  </g>
+
+  <!-- orbit -->
+  <circle cx="1010" cy="160" r="92" class="faint" stroke-width="1"/>
+  <circle cx="1010" cy="160" r="46" class="faint" stroke-width="1" stroke-dasharray="2 6"/>
+  <circle cx="1010" cy="160" r="5" class="ink"/>
+  <g class="orbit">
+    <circle cx="1102" cy="160" r="4" class="ink"/>
+  </g>
+</svg>

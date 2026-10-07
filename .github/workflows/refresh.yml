@@ -14,14 +14,16 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      PROFILE_TOKEN: ${{ secrets.PROFILE_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - if: env.PROFILE_TOKEN == ''
+        run: echo "::warning::PROFILE_TOKEN secret not set, so the graph is rebuilt from the cached data"
       - run: python3 assets/build.py
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: commit if changed
         run: |
           git diff --quiet && exit 0

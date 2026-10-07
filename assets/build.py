@@ -3,7 +3,7 @@
     python3 assets/build.py
 
 Edit the content below, re-run, commit. Nothing else to install.
-Contribution data is fetched with $GITHUB_TOKEN (or the local `gh` login) and
+Contribution data is fetched with $PROFILE_TOKEN (or the local `gh` login) and
 cached in contributions.json, so the build still works offline.
 """
 import json
@@ -153,7 +153,9 @@ CAL_QUERY = """query($login: String!) { user(login: $login) { contributionsColle
 
 def fetch_calendar():
     cache = OUT / "contributions.json"
-    token = os.environ.get("GITHUB_TOKEN")
+    # Needs a token that can see the user's contributions: a personal token (PROFILE_TOKEN in CI)
+    # or the local gh login. The default Actions GITHUB_TOKEN sees none and returns an empty year.
+    token = os.environ.get("PROFILE_TOKEN")
     if not token:
         try:
             token = subprocess.run(["gh", "auth", "token"], capture_output=True, text=True, check=True).stdout.strip()
@@ -168,6 +170,8 @@ def fetch_calendar():
             )
             with urllib.request.urlopen(req, timeout=20) as r:
                 cal = json.load(r)["data"]["user"]["contributionsCollection"]["contributionCalendar"]
+            if cal["totalContributions"] == 0 and cache.exists():
+                raise ValueError("empty calendar; token probably can't see contributions")
             cache.write_text(json.dumps(cal, indent=1))
             return cal
         except Exception as e:  # network or auth trouble: fall back to the cache

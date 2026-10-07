@@ -7,7 +7,7 @@
   @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
 </style>
 
-<text x="0" y="34" class="mono muted" font-size="14" letter-spacing="2">01</text>
+<text x="0" y="34" class="mono muted" font-size="14" letter-spacing="2">02</text>
 <text x="52" y="35" class="sans ink" font-size="22" font-weight="400">now</text>
 <line x1="115" y1="29" x2="960" y2="29" stroke="#d0d7de" stroke-width="1"/>
 </svg>

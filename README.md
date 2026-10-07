@@ -6,6 +6,12 @@ I build across the stack, from browser extensions to backend services to the occ
 
 <br><br>
 
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/section-activity-dark.svg"><img alt="activity" src="assets/section-activity-light.svg" width="100%"></picture>
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/activity-dark.svg"><img alt="contribution graph for the past year" src="assets/activity-light.svg" width="100%"></picture>
+
+<br>
+
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/section-now-dark.svg"><img alt="now" src="assets/section-now-light.svg" width="100%"></picture>
 
 <p>

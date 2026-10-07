@@ -3,7 +3,14 @@
     python3 assets/build.py
 
 Edit the content below, re-run, commit. Nothing else to install.
+Contribution data is fetched with $GITHUB_TOKEN (or the local `gh` login) and
+cached in contributions.json, so the build still works offline.
 """
+import json
+import os
+import subprocess
+import urllib.request
+from datetime import date
 from pathlib import Path
 from textwrap import wrap
 from xml.sax.saxutils import escape
@@ -18,6 +25,7 @@ THEMES = {
 MONO = 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace'
 SANS = '-apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif'
 
+USER = "SHINO-01"
 W = 960  # full-width pieces share this width so everything lines up on one left edge
 
 PROJECTS = {
@@ -139,14 +147,84 @@ def footer(c):
     return svg(W, 140, body, c, css)
 
 
+CAL_QUERY = """query($login: String!) { user(login: $login) { contributionsCollection { contributionCalendar {
+  totalContributions weeks { contributionDays { date contributionCount contributionLevel } } } } } }"""
+
+
+def fetch_calendar():
+    cache = OUT / "contributions.json"
+    token = os.environ.get("GITHUB_TOKEN")
+    if not token:
+        try:
+            token = subprocess.run(["gh", "auth", "token"], capture_output=True, text=True, check=True).stdout.strip()
+        except (OSError, subprocess.CalledProcessError):
+            token = None
+    if token:
+        try:
+            req = urllib.request.Request(
+                "https://api.github.com/graphql",
+                data=json.dumps({"query": CAL_QUERY, "variables": {"login": USER}}).encode(),
+                headers={"Authorization": f"bearer {token}", "Content-Type": "application/json"},
+            )
+            with urllib.request.urlopen(req, timeout=20) as r:
+                cal = json.load(r)["data"]["user"]["contributionsCollection"]["contributionCalendar"]
+            cache.write_text(json.dumps(cal, indent=1))
+            return cal
+        except Exception as e:  # network or auth trouble: fall back to the cache
+            print(f"contributions: using cache ({e})")
+    return json.loads(cache.read_text())
+
+
+LEVEL = {"NONE": 0, "FIRST_QUARTILE": 0.28, "SECOND_QUARTILE": 0.5, "THIRD_QUARTILE": 0.74, "FOURTH_QUARTILE": 1}
+
+
+def activity(c, cal):
+    cell, top = 13, 30
+    weeks = cal["weeks"]
+    pitch = (W - cell) / (len(weeks) - 1)  # span the shared column edge to edge
+    x_off = 0
+    cells, months, last_month = [], [], None
+    for wi, week in enumerate(weeks):
+        x = round(x_off + wi * pitch, 2)
+        first = date.fromisoformat(week["contributionDays"][0]["date"])
+        if first.month != last_month and first.day <= 7 and wi < len(weeks) - 2:
+            months.append(f'<text x="{x}" y="14" class="mono muted" font-size="12" letter-spacing="1">{first.strftime("%b").upper()}</text>')
+        last_month = first.month
+        col = []
+        for day in week["contributionDays"]:
+            d = date.fromisoformat(day["date"])
+            y = top + d.isoweekday() % 7 * pitch
+            lv = LEVEL[day["contributionLevel"]]
+            fill = f'fill="{c["ink"]}" fill-opacity="{lv}"' if lv else f'fill="{c["faint"]}"'
+            col.append(f'<rect x="{x}" y="{y}" width="{cell}" height="{cell}" rx="3" {fill}><title>{day["contributionCount"]} on {day["date"]}</title></rect>')
+        cells.append(f'<g class="col" style="animation-delay:{wi * 14}ms">{"".join(col)}</g>')
+    base = top + 7 * pitch + 22
+    legend_x = W - cell - 4 * 18
+    legend = "".join(
+        f'<rect x="{legend_x + i * 18}" y="{base - 11}" width="{cell}" height="{cell}" rx="3" '
+        + (f'fill="{c["ink"]}" fill-opacity="{lv}"' if lv else f'fill="{c["faint"]}"') + "/>"
+        for i, lv in enumerate([0, .28, .5, .74, 1])
+    )
+    css = """.col { opacity: 0; animation: in .6s ease-out forwards; }
+  @keyframes in { to { opacity: 1; } }"""
+    body = f"""{"".join(months)}
+{"".join(cells)}
+<text x="{x_off}" y="{base}" class="mono soft" font-size="13" letter-spacing="1">{cal["totalContributions"]} CONTRIBUTIONS · PAST YEAR</text>
+<text x="{legend_x - 14}" y="{base}" text-anchor="end" class="mono muted" font-size="12" letter-spacing="1">LESS</text>
+{legend}"""
+    return svg(W, base + 8, body, c, css)
+
+
 def main():
+    cal = fetch_calendar()
     files = {"header": header, "tools": tools, "footer": footer}
+    sections = ["activity", *PROJECTS, "tools"]
     for theme, c in THEMES.items():
         for name, fn in files.items():
             (OUT / f"{name}-{theme}.svg").write_text(fn(c))
-        for i, key in enumerate(PROJECTS, 1):
+        (OUT / f"activity-{theme}.svg").write_text(activity(c, cal))
+        for i, key in enumerate(sections, 1):
             (OUT / f"section-{key}-{theme}.svg").write_text(section(c, f"{i:02d}", key))
-        (OUT / f"section-tools-{theme}.svg").write_text(section(c, f"{len(PROJECTS) + 1:02d}", "tools"))
         n = 0
         for key, items in PROJECTS.items():
             for name, desc, tags in items:

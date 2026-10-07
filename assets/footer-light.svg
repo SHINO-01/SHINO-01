@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="140" viewBox="0 0 960 140" fill="none">
+<style>
+  .mono { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; }
+  .sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif; }
+  .ink { fill: #1f2328; } .soft { fill: #57606a; } .muted { fill: #8c959f; }
+  .orbit { transform-origin: 480.0px 60px; animation: spin 20s linear infinite; } @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+</style>
+
+<line x1="0" y1="60" x2="436.0" y2="60" stroke="#d0d7de"/>
+<line x1="524.0" y1="60" x2="960" y2="60" stroke="#d0d7de"/>
+<circle cx="480.0" cy="60" r="22" stroke="#d0d7de"/>
+<circle cx="480.0" cy="60" r="3" fill="#1f2328"/>
+<g class="orbit"><circle cx="502.0" cy="60" r="2.5" fill="#1f2328"/></g>
+<text x="480.0" y="126" text-anchor="middle" class="mono muted" font-size="14" letter-spacing="3">SLOWLY, ON PURPOSE.</text>
+</svg>

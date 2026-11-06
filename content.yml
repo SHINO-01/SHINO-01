@@ -1,0 +1,173 @@
+# Every word on the profile lives here.
+#
+# Edit this file and push: the refresh workflow rebuilds the images and README.md.
+# To preview locally first:  python3 assets/build.py
+#
+# Text in {braces} is filled in from live GitHub data when the page is built.
+# Small labels set in mono or Anton are shown in capitals automatically, so
+# write them however you like.
+#
+# Colours:  red, yellow, green, blue, pink, black
+# Drawings: kanban, candles, orbit, network, room, sword, browser, tree, hand, rag
+
+user: SHINO-01  # the GitHub account whose contributions are drawn
+
+
+header:
+  masthead:
+    left: SHINO-01 / field notes
+    middle: software · systems · small tools
+    right: New South Wales
+  first_name: Sakif
+  last_name: Hussain
+  ring: i make things i know i won't finish anytime soon   # runs around the dial
+  dial:
+    top: LEO
+    bottom: MEO
+    centre: T-00:00
+  tagline: software engineer — builds small tools & quiet interfaces.
+  intro: >-
+    I build across the stack, from browser extensions to backend services to the
+    occasional Rust engine. I like things that are small, private by default, and
+    quiet to use. I start more than I finish, and some of it ships.
+  caption:
+    label: fig. 0
+    text: orbit of attention, not to scale
+  ticker:  # the scrolling band along the bottom of the header
+    - browser extensions
+    - backend services
+    - the occasional rust engine
+    - small
+    - private by default
+    - quiet to use
+    - start more, finish some
+
+
+activity:
+  # Available everywhere in this block:
+  #   {total} {active} {quiet} {span} {longest} {current} {today}
+  title: activity
+  as_of: as of {today}
+  figure: fig. 1 — the year in tiles
+  headline:
+    - contributions,
+    - in the past year.
+  # The six stats beside the headline, in the order listed. Keep the keys; edit the words.
+  # {s} becomes "s" when the number isn't 1.
+  stats:
+    active_days:   { label: active days,   unit: "of {span}" }
+    longest_run:   { label: longest run,   unit: "day{s}" }
+    current_run:   { label: current run,   unit: "day{s}" }
+    loudest_day:   { label: loudest day,   unit: "on {date}" }     # {date}: e.g. 15 oct
+    busiest_month: { label: busiest month, unit: "{count} total" }
+    favourite_day: { label: favourite day, unit: mostly }
+  week_totals: week totals
+  day_labels: [mon, wed, fri]
+  today: today
+  loudest:
+    title: the loudest day
+    detail: "{count} contributions · {weekday} {date}"
+  legend:
+    low: quiet
+    high: loud
+  rhythm:
+    label: rhythm
+    letters: SMTWTFS  # one letter per weekday, starting Sunday
+  peak_week:
+    label: peak week
+    text: "{count} from {date}"
+  closing: "{active} loud days, {quiet} quiet ones. some of it ships."
+  tooltips:  # hover text inside the image (only shows when the SVG is opened on its own)
+    day: "{count} on {date}"
+    week: "{count} that week"
+  alt: contribution graph for the past year, with weekly totals, streaks and the busiest day
+
+
+# Project sections, in page order. Cards fill two per row; an odd one out at the
+# end of a section spans the full width.
+sections:
+  - title: now
+    kicker: on the bench
+    subtitle: half-built, and loved anyway
+    status: in progress
+    status_dot: true
+    projects:
+      - name: rolestash
+        repo: rolestash-extension
+        description: A private job-application tracker. One-click capture from any posting to a local kanban board. No AI, no inbox scraping.
+        tags: [typescript, chrome ext]
+        colour: yellow
+        drawing: kanban
+      - name: deltadrift
+        repo: deltadrift
+        description: "A low-latency quant trading engine in Rust: a lock-free, core-pinned pipeline behind hard risk guardrails."
+        tags: [rust, lock-free, paper trading]
+        colour: blue
+        drawing: candles
+        drawing_label: risk limit
+      - name: orbitguard
+        repo: orbitguard
+        description: Tracking and maneuver computation for spacecraft on in-orbit missions, with collision alerts when debris gets too close.
+        tags: [orbital mechanics, debris alerts]
+        colour: green
+        drawing: orbit
+
+  - title: before
+    kicker: from the archive
+    subtitle: shipped, shelved, or quietly abandoned
+    status: archive
+    status_dot: false
+    projects:
+      - name: eventure ai
+        repo: EventureAI-W3-Hackathon
+        description: A multi-agent network that plans trips, guides tours and books tickets. Hackathon build.
+        tags: [python, crewai]
+        colour: red
+        drawing: network
+      - name: tv room
+        repo: Three.js_TV_Room
+        description: A furnished living room, modelled and lit in Three.js. Final project for a computer graphics course.
+        tags: [javascript, three.js]
+        colour: pink
+        drawing: room
+      - name: demon slayer
+        repo: Demon-Slayer-Game
+        description: A 2D action game written in C on iGraphics, a small wrapper over OpenGL.
+        tags: [c, opengl]
+        colour: black
+        drawing: sword
+      - name: site checks
+        repo: W3_Assignment_07
+        description: Automated end-to-end testing of a live website with Selenium.
+        tags: [python, selenium]
+        colour: yellow
+        drawing: browser
+
+
+tools:
+  title: tools
+  kicker: in the drawer
+  subtitle: what's usually open in another tab
+  count: "{count} entries"
+  groups:
+    - label: languages
+      colour: red
+      items: [typescript, python, rust, go]
+    - label: frameworks
+      colour: yellow
+      items: [react, fastapi, django, flask]
+    - label: data
+      colour: green
+      items: [postgres, timescaledb]
+    - label: ai
+      colour: blue
+      items: [crewai, rag pipelines, multi-agent systems]
+
+
+footer:
+  big: slowly,
+  sign_off: on purpose.
+  colophon:
+    - set in instrument serif, anton
+    - "& jetbrains mono. drawn by"
+    - assets/build.py, tiles daily.

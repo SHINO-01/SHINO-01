@@ -11,7 +11,7 @@
   .monob { font-family: "SH Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-style: normal; font-weight: 600; }
   
   .slow { transform-origin: 772px 262px; animation: spin 90s linear infinite; }
-  .tick { animation: tick 70s linear infinite; }
+  .tick { animation: tick 74s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
   @keyframes tick { to { transform: translateX(-1928.9px); } }
   @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }

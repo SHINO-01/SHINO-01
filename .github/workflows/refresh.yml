@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: [assets/build.py]
+    paths: [content.yml, assets/build.py]
 
 permissions:
   contents: write
@@ -23,11 +23,13 @@ jobs:
           python-version: "3.12"
       - if: env.PROFILE_TOKEN == ''
         run: echo "::warning::PROFILE_TOKEN secret not set, so the graph is rebuilt from the cached data"
+      - run: pip install pyyaml
       - run: python3 assets/build.py
       - name: commit if changed
         run: |
-          git diff --quiet && exit 0
+          git add -A README.md assets
+          git diff --cached --quiet && exit 0
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -am "refresh contribution graph"
+          git commit -m "rebuild profile"
           git push

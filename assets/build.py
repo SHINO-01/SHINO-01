@@ -1,8 +1,9 @@
-"""Generates every SVG used by the profile README, in light and dark variants.
+"""Generates README.md and every SVG it shows, in light and dark variants.
 
     python3 assets/build.py
 
-Edit the content below, re-run, commit. Nothing else to install.
+All words come from content.yml at the repo root; this file only holds layout.
+Needs PyYAML (pip install pyyaml).
 Contribution data is fetched with $PROFILE_TOKEN (or the local `gh` login) and
 cached in contributions.json, so the build still works offline.
 
@@ -22,11 +23,15 @@ from datetime import date
 from pathlib import Path
 from xml.sax.saxutils import escape
 
+import yaml
+
 OUT = Path(__file__).parent
+ROOT = OUT.parent
 FONTS = OUT / "fonts"
 METRICS = json.loads((FONTS / "metrics.json").read_text())
+CONTENT = yaml.safe_load((ROOT / "content.yml").read_text())
 
-USER = "SHINO-01"
+USER = CONTENT["user"]
 W = 960  # full-width pieces share this width so everything lines up on one left edge
 
 # Card fills are the same in both themes; they read as printed stock on either page.
@@ -46,39 +51,20 @@ THEMES = {
     ),
 }
 
-INTRO = ("I build across the stack, from browser extensions to backend services to the occasional Rust engine. "
-         "I like things that are small, private by default, and quiet to use. I start more than I finish, and some of it ships.")
+COLOURS = dict(red="verm", yellow="mari", green="jade", blue="ultra", pink="rose", black="ink")
 
-TICKER = ["browser extensions", "backend services", "the occasional rust engine", "small", "private by default",
-          "quiet to use", "start more, finish some"]
 
-# (name, repo, description, tags, card stock, glyph). Three in a section puts the last one full width.
-PROJECTS = {
-    "now": [
-        ("rolestash", "rolestash-extension", "A private job-application tracker. One-click capture from any posting to a local kanban board. No AI, no inbox scraping.", ["typescript", "chrome ext"], "mari", "kanban"),
-        ("deltadrift", "deltadrift", "A low-latency quant trading engine in Rust: a lock-free, core-pinned pipeline behind hard risk guardrails.", ["rust", "lock-free", "paper trading"], "ultra", "candles"),
-        ("orbitguard", "orbitguard", "Tracking and maneuver computation for spacecraft on in-orbit missions, with collision alerts when debris gets too close.", ["orbital mechanics", "debris alerts"], "jade", "orbit"),
-    ],
-    "before": [
-        ("eventure ai", "EventureAI-W3-Hackathon", "A multi-agent network that plans trips, guides tours and books tickets. Hackathon build.", ["python", "crewai"], "verm", "network"),
-        ("tv room", "Three.js_TV_Room", "A furnished living room, modelled and lit in Three.js. Final project for a computer graphics course.", ["javascript", "three.js"], "rose", "room"),
-        ("demon slayer", "Demon-Slayer-Game", "A 2D action game written in C on iGraphics, a small wrapper over OpenGL.", ["c", "opengl"], "ink", "sword"),
-        ("site checks", "W3_Assignment_07", "Automated end-to-end testing of a live website with Selenium.", ["python", "selenium"], "mari", "browser"),
-    ],
-}
+class _Keep(dict):
+    def __missing__(self, key):  # leave unknown {placeholders} visible rather than crash
+        return "{" + key + "}"
 
-SECTIONS = {
-    "now": ("on the bench", "half-built, and loved anyway"),
-    "before": ("from the archive", "shipped, shelved, or quietly abandoned"),
-    "tools": ("in the drawer", "what's usually open in another tab"),
-}
 
-TOOLS = [
-    ("languages", "verm", ["typescript", "python", "rust", "go"]),
-    ("frameworks", "mari", ["react", "fastapi", "django", "flask"]),
-    ("data", "jade", ["postgres", "timescaledb"]),
-    ("ai", "ultra", ["crewai", "rag pipelines", "multi-agent systems"]),
-]
+def fill(template, **values):
+    return str(template).format_map(_Keep(values))
+
+
+def slug(s):
+    return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
 
 
 # ── type ─────────────────────────────────────────────────────────────────────
@@ -201,15 +187,18 @@ def masthead(c, y, left, mid, right, x0=36, x1=W - 36):
 # ── header ───────────────────────────────────────────────────────────────────
 
 def header(c):
-    H = 704
+    t = CONTENT["header"]
     cx, cy, R = 772, 262, 132
-    out = [masthead(c, 40, "SHINO-01 / FIELD NOTES", "SOFTWARE · SYSTEMS · SMALL TOOLS", "NEW SOUTH WALES")]
+    m = t["masthead"]
+    out = [masthead(c, 40, m["left"].upper(), m["middle"].upper(), m["right"].upper())]
 
     # the name, set large and layered
-    hs = fit("HUSSAIN", "anton", 150, 560, 2)
-    out.append(T(30, 392, "HUSSAIN", "anton", hs, c["verm"], 2))
-    out.append(T(22, 250, "Sakif", "ital", 210, c["ink"], -4))
-    out.append(sparkle(30 + tw("HUSSAIN", "anton", hs, 2) + 24, 300, 14, c["mari"]))
+    last = t["last_name"].upper()
+    hs = fit(last, "anton", 150, 560, 2)
+    fs = fit(t["first_name"], "ital", 210, 560, -4)
+    out.append(T(30, 392, last, "anton", hs, c["verm"], 2))
+    out.append(T(22, 250, t["first_name"], "ital", fs, c["ink"], -4))
+    out.append(sparkle(min(30 + tw(last, "anton", hs, 2) + 24, 580), 300, 14, c["mari"]))
 
     # orbital dial
     ticks = []
@@ -220,15 +209,17 @@ def header(c):
                      f'x2="{cx + (R + 14) * math.cos(a):.1f}" y2="{cy + (R + 14) * math.sin(a):.1f}" '
                      f'stroke="{c["muted"] if i % 6 else c["ink"]}" stroke-width="{1 if i % 6 else 1.6}"/>')
     rt = R + 32
-    ring_text = "I MAKE THINGS I KNOW I WON'T FINISH ANYTIME SOON  ·  "
-    ls = (2 * math.pi * rt - tw(ring_text, "monob", 11.5)) / len(ring_text)
+    ring_text = t["ring"].upper() + "  ·  "
+    rs = fit(ring_text, "monob", 11.5, 2 * math.pi * rt * .9)
+    ls = (2 * math.pi * rt - tw(ring_text, "monob", rs)) / len(ring_text)
+    dial = t["dial"]
     out.append(f"""
 <circle cx="{cx}" cy="{cy}" r="{R + 52}" fill="{c['bg2']}"/>
 <circle cx="{cx}" cy="{cy}" r="{R + 52}" stroke="{c['line']}"/>
 <circle cx="{cx}" cy="{cy}" r="{R + 14}" stroke="{c['line']}"/>
 {''.join(ticks)}
 <path id="ring" d="M{cx - rt} {cy} a{rt} {rt} 0 1 1 {2 * rt} 0 a{rt} {rt} 0 1 1 {-2 * rt} 0"/>
-<g class="slow"><text class="monob" font-size="11.5" fill="{c['soft']}" letter-spacing="{ls:.3f}"><textPath href="#ring">{escape(ring_text)}</textPath></text></g>
+<g class="slow"><text class="monob" font-size="{rs}" fill="{c['soft']}" letter-spacing="{ls:.3f}"><textPath href="#ring">{escape(ring_text)}</textPath></text></g>
 <circle cx="{cx}" cy="{cy}" r="{R - 34}" stroke="{c['muted']}" stroke-dasharray="1 6" stroke-linecap="round"/>
 <ellipse id="o1" cx="{cx}" cy="{cy}" rx="{R - 6}" ry="{(R - 6) * .32:.1f}" transform="rotate(-24 {cx} {cy})" stroke="{c['jade']}" stroke-width="1.4"/>
 <ellipse id="o2" cx="{cx}" cy="{cy}" rx="{R - 22}" ry="{(R - 22) * .45:.1f}" transform="rotate(38 {cx} {cy})" stroke="{c['ultra']}" stroke-width="1.4"/>
@@ -237,25 +228,29 @@ def header(c):
 <g clip-path="url(#planet)" stroke="{c['verm']}" stroke-width="2.2">{''.join(f'<line x1="{cx - 40}" y1="{cy - 30 + i * 7}" x2="{cx + 40}" y2="{cy - 30 + i * 7}" opacity="{min(1, i / 8):.2f}"/>' for i in range(1, 10))}</g>
 {orbiter(cx, cy, R - 6, .32, -24, f'<circle r="5" fill="{c['ink']}"/><circle r="10" stroke="{c['ink']}" opacity=".35"/>', 16)}
 {orbiter(cx, cy, R - 22, .45, 38, f'<rect x="-4.5" y="-4.5" width="9" height="9" fill="{c['verm']}" transform="rotate(45)"/>', 9, reverse=True)}
-{T(cx + R - 2, cy - 44, "LEO", "monob", 9.5, c['jade'], 1.5)}
-{T(cx - R + 10, cy + 70, "MEO", "monob", 9.5, c['ultra'], 1.5)}
-{T(cx, cy + R - 44, "T-00:00", "monob", 10, c['muted'], 1.5, "middle")}""")
+{T(cx + R - 2, cy - 44, str(dial["top"]).upper(), "monob", 9.5, c['jade'], 1.5)}
+{T(cx - R + 10, cy + 70, str(dial["bottom"]).upper(), "monob", 9.5, c['ultra'], 1.5)}
+{T(cx, cy + R - 44, str(dial["centre"]).upper(), "monob", 10, c['muted'], 1.5, "middle")}""")
 
-    # deck and intro
+    # tagline and intro
     y = 452
     out.append(f'<line x1="36" y1="{y - 26}" x2="84" y2="{y - 26}" stroke="{c["verm"]}" stroke-width="3"/>')
-    for i, line in enumerate(wrap_px("software engineer — builds small tools & quiet interfaces.", "ital", 34, 540)):
+    tag = wrap_px(t["tagline"], "ital", 34, 540)
+    for i, line in enumerate(tag):
         out.append(T(36, y + 8 + i * 38, line, "ital", 34, c["ink"]))
-    y += 8 + 38 * 2 + 4
-    for i, line in enumerate(wrap_px(INTRO, "mono", 12.5, 560)):
+    y += 8 + 38 * len(tag) + 4
+    intro = wrap_px(t["intro"], "mono", 12.5, 560)
+    for i, line in enumerate(intro):
         out.append(T(36, y + i * 20, line, "mono", 12.5, c["soft"]))
-    out.append(T(W - 36, y, "FIG. 0", "monob", 10, c["muted"], 2, "end"))
-    out.append(T(W - 36, y + 18, "orbit of attention, not to scale", "ital", 17, c["soft"], 0, "end"))
+    cap = t["caption"]
+    out.append(T(W - 36, y, cap["label"].upper(), "monob", 10, c["muted"], 2, "end"))
+    out.append(T(W - 36, y + 18, cap["text"], "ital", 17, c["soft"], 0, "end"))
 
-    # ticker
-    tband = H - 62
+    # ticker, sitting below however long the intro runs
+    tband = max(642, y + 20 * (len(intro) - 1) + 42)
+    H = tband + 62
     seq, x = [], 0.0
-    for item in TICKER:
+    for item in t["ticker"]:
         s = item.upper()
         seq.append(T(x, tband + 41, s, "anton", 30, INK, 1))
         x += tw(s, "anton", 30, 1) + 22
@@ -269,7 +264,7 @@ def header(c):
 
     css = f"""
   .slow {{ transform-origin: {cx}px {cy}px; animation: spin 90s linear infinite; }}
-  .tick {{ animation: tick 70s linear infinite; }}
+  .tick {{ animation: tick {max(30, L / 26):.0f}s linear infinite; }}
   @keyframes spin {{ to {{ transform: rotate(360deg); }} }}
   @keyframes tick {{ to {{ transform: translateX(-{L:.1f}px); }} }}"""
     return panel(c, W, H, "\n".join(out), css=css)
@@ -350,16 +345,21 @@ def activity(c, cal):
     heat = c["heat"]
     weeks = cal["weeks"]
     n = len(weeks)
-    out = [masthead(c, 40, "№ 01 — ACTIVITY", "", f"AS OF {fmt(st['today'])}")]
+    t = CONTENT["activity"]
+    ctx = dict(total=f"{st['total']:,}", active=st["active"], quiet=st["span"] - st["active"], span=st["span"],
+               longest=st["longest"], current=st["current"], today=fmt(st["today"]))
+    f = lambda template, **extra: fill(template, **ctx, **extra)
+    out = [masthead(c, 40, f"№ 01 — {f(t['title'])}".upper(), "", f(t["as_of"]).upper())]
 
     # the headline number
-    out.append(T(36, 98, "FIG. 1 — THE YEAR IN TILES", "monob", 10.5, c["muted"], 2))
+    out.append(T(36, 98, f(t["figure"]).upper(), "monob", 10.5, c["muted"], 2))
     total = f"{st['total']:,}"
     ns = fit(total, "anton", 176, 300)
     out.append(T(30, 266, total, "anton", ns, c["mari"], 1))
     nx = 30 + tw(total, "anton", ns, 1) + 22
-    out.append(T(nx, 204, "contributions,", "ital", 40, c["ink"]))
-    out.append(T(nx, 246, "in the past year.", "ital", 40, c["soft"]))
+    for i, line in enumerate(t["headline"][:2]):
+        line = f(line)
+        out.append(T(nx, 204 + i * 42, line, "ital", fit(line, "ital", 40, 560 - nx), c["soft"] if i else c["ink"]))
     out.append(sparkle(nx + 6, 140, 10, c["verm"]))
 
     # stat grid
@@ -368,15 +368,21 @@ def activity(c, cal):
     pd = date.fromisoformat(peak["date"])
     m_date, m_total = st["month"]
     fav = max(range(7), key=lambda i: st["weekdays"][i])
-    cells = [
-        ("ACTIVE DAYS", f"{st['active']}", f"of {st['span']}", c["jade"]),
-        ("LONGEST RUN", f"{st['longest']}", "days" if st["longest"] != 1 else "day", c["mari"]),
-        ("CURRENT RUN", f"{st['current']}", "days" if st["current"] != 1 else "day", c["verm"]),
-        ("LOUDEST DAY", f"{peak['contributionCount']}", f"on {pd.day} {pd.strftime('%b').lower()}", c["verm"]),
-        ("BUSIEST MONTH", m_date.strftime("%b").upper(), f"{m_total} total", c["ultra"]),
-        ("FAVOURITE DAY", DOW[fav][:3].upper(), "mostly", c["rose"]),
-    ]
-    for i, (label, val, unit, accent) in enumerate(cells):
+    plural = lambda v: "" if v == 1 else "s"
+    values = {  # key in content.yml -> (shown value, extra template fields, accent)
+        "active_days": (st["active"], {}, c["jade"]),
+        "longest_run": (st["longest"], {"s": plural(st["longest"])}, c["mari"]),
+        "current_run": (st["current"], {"s": plural(st["current"])}, c["verm"]),
+        "loudest_day": (peak["contributionCount"], {"count": peak["contributionCount"],
+                        "date": f"{pd.day} {pd.strftime('%b').lower()}"}, c["verm"]),
+        "busiest_month": (m_date.strftime("%b").upper(), {"count": m_total}, c["ultra"]),
+        "favourite_day": (DOW[fav][:3].upper(), {}, c["rose"]),
+    }
+    cells = []
+    for key, spec in t["stats"].items():
+        val, extra, accent = values[key]
+        cells.append((f(spec["label"], **extra).upper(), str(val), f(spec["unit"], **extra), accent))
+    for i, (label, val, unit, accent) in enumerate(cells[:6]):
         x, y = gx + (i % 2) * cw, gy + (i // 2) * ch
         out.append(f'<circle cx="{x + 16}" cy="{y + 18.5}" r="3.5" fill="{accent}"/>')
         out.append(T(x + 26, y + 22, label, "monob", 9.5, c["muted"], 1.6))
@@ -405,15 +411,16 @@ def activity(c, cal):
         tx, ty, twd, th = 58, months_y - 22, x1 + 16 - 58, 7 * pitch + 46
         # weekly skyline (square-root scale, so quiet weeks still register)
         out.append(f'<line x1="{x0}" y1="{sky_base + .5}" x2="{x1}" y2="{sky_base + .5}" stroke="{c["line"]}"/>')
-        out.append(T(x0 - 12, sky_base - 14, "WEEK", "monob", 8.5, c["muted"], 1.4, "end"))
-        out.append(T(x0 - 12, sky_base - 2, "TOTALS", "monob", 8.5, c["muted"], 1.4, "end"))
+        wt_words = t["week_totals"].upper().split(maxsplit=1)
+        for j, word in enumerate(reversed(wt_words)):
+            out.append(T(x0 - 12, sky_base - 2 - j * 12, word, "monob", 8.5, c["muted"], 1.4, "end"))
         for k, wi in enumerate(chunk):
             x = x0 + k * pitch
             lv = max(LEVEL[d["contributionLevel"]] for d in weeks[wi]["contributionDays"])
             if wt[wi]:
                 h = max(3, math.sqrt(wt[wi] / wmax) * sky_h)
                 out.append(f'<rect class="bar" style="animation-delay:{300 + wi * 16}ms" x="{x:.2f}" y="{sky_base - h:.2f}" '
-                           f'width="{cell:.2f}" height="{h:.2f}" rx="2.5" fill="{heat[max(lv, 1)]}"><title>{wt[wi]} that week</title></rect>')
+                           f'width="{cell:.2f}" height="{h:.2f}" rx="2.5" fill="{heat[max(lv, 1)]}"><title>{escape(f(t["tooltips"]["week"], count=wt[wi]))}</title></rect>')
                 if wi == pw:
                     out.append(T(x + cell / 2, sky_base - h - 6, str(wt[wi]), "monob", 9.5, c["ink"], 0, "middle"))
             else:
@@ -422,7 +429,7 @@ def activity(c, cal):
         out.append(f'<rect x="{tx}" y="{ty}" width="{twd}" height="{th}" rx="16" fill="{c["bg2"]}" stroke="{c["line"]}"/>')
         for (px, py, sx, sy) in [(tx, ty, -1, -1), (tx + twd, ty, 1, -1), (tx, ty + th, -1, 1), (tx + twd, ty + th, 1, 1)]:
             out.append(f'<path d="M{px + sx * 6} {py} h{sx * 10} M{px} {py + sy * 6} v{sy * 10}" stroke="{c["muted"]}"/>')
-        for row, label in [(1, "MON"), (3, "WED"), (5, "FRI")]:
+        for row, label in zip([1, 3, 5], [str(d).upper() for d in t["day_labels"]]):
             out.append(T(x0 - 12, grid_top + row * pitch + cell * .64, label, "monob", 9, c["muted"], 1, "end"))
 
         last_month = None
@@ -442,7 +449,7 @@ def activity(c, cal):
                 yy = grid_top + d.isoweekday() % 7 * pitch
                 lv, cnt = LEVEL[day["contributionLevel"]], day["contributionCount"]
                 col.append(f'<rect x="{x:.2f}" y="{yy:.2f}" width="{cell:.2f}" height="{cell:.2f}" rx="5" fill="{heat[lv]}">'
-                           f'<title>{cnt} on {day["date"]}</title></rect>')
+                           f'<title>{escape(f(t["tooltips"]["day"], count=cnt, date=day["date"]))}</title></rect>')
                 if not lv:
                     col.append(f'<circle cx="{x + cell / 2:.2f}" cy="{yy + cell / 2:.2f}" r="1.3" fill="{c["muted"]}" opacity=".45"/>')
                 elif lv >= 3:
@@ -462,7 +469,7 @@ def activity(c, cal):
     if today_xy:
         x, yy = today_xy
         out.append(f'<rect x="{x - 3:.2f}" y="{yy - 3:.2f}" width="{cell + 6:.2f}" height="{cell + 6:.2f}" rx="7" stroke="{c["ink"]}" stroke-width="1.6"/>')
-        out.append(T(x + cell + 2, yy + cell + 18, "TODAY", "monob", 8.5, c["ink"], 1.2, "end"))
+        out.append(T(x + cell + 2, yy + cell + 18, t["today"].upper(), "monob", 8.5, c["ink"], 1.2, "end"))
 
     # callout on the loudest day, routed along a gutter so it never covers a tile
     if peak_xy and peak["contributionCount"]:
@@ -472,7 +479,8 @@ def activity(c, cal):
         ly = top + 6
         tx_end = gut - 12 if left else gut + 12
         anchor = "end" if left else "start"
-        t1, t2 = "the loudest day", f"{peak['contributionCount']} CONTRIBUTIONS · {pd.strftime('%a').upper()} {fmt(pd)}"
+        t1 = f(t["loudest"]["title"])
+        t2 = f(t["loudest"]["detail"], count=peak["contributionCount"], weekday=pd.strftime("%a"), date=fmt(pd)).upper()
         bw = max(tw(t1, "ital", 26), tw(t2, "monob", 9.5, 1.2)) + 16
         bx = tx_end - bw + 8 if left else tx_end - 8
         out.append(f'<rect x="{bx:.1f}" y="{ly - 24}" width="{bw:.1f}" height="44" fill="{c["bg"]}"/>')
@@ -483,30 +491,35 @@ def activity(c, cal):
 
     # legend, weekly rhythm, peak week
     ly = y + 26
-    out.append(T(36, ly, "QUIET", "monob", 9.5, c["muted"], 1.5))
+    low = t["legend"]["low"].upper()
+    out.append(T(36, ly, low, "monob", 9.5, c["muted"], 1.5))
+    lx = 36 + tw(low, "monob", 9.5, 1.5) + 10
     for i in range(5):
-        out.append(f'<rect x="{88 + i * 22}" y="{ly - 13}" width="17" height="17" rx="4" fill="{heat[i]}"/>')
-    out.append(T(88 + 5 * 22 + 4, ly, "LOUD", "monob", 9.5, c["muted"], 1.5))
+        out.append(f'<rect x="{lx + i * 22:.1f}" y="{ly - 13}" width="17" height="17" rx="4" fill="{heat[i]}"/>')
+    out.append(T(lx + 5 * 22 + 4, ly, t["legend"]["high"].upper(), "monob", 9.5, c["muted"], 1.5))
 
     rx0 = 340
-    out.append(T(rx0, ly, "RHYTHM", "monob", 9.5, c["muted"], 1.5))
+    rhythm = t["rhythm"]["label"].upper()
+    out.append(T(rx0, ly, rhythm, "monob", 9.5, c["muted"], 1.5))
+    letters = (str(t["rhythm"]["letters"]) + "       ")[:7]
     wmx = max(st["weekdays"]) or 1
     for i, v in enumerate(st["weekdays"]):
-        bx = rx0 + 74 + i * 22
+        bx = rx0 + max(74, tw(rhythm, "monob", 9.5, 1.5) + 14) + i * 22
         h = max(2, v / wmx * 28)
         out.append(f'<rect x="{bx}" y="{ly + 2 - h:.1f}" width="13" height="{h:.1f}" rx="2" fill="{c["verm"] if i == fav else c["jade"]}"/>')
-        out.append(T(bx + 6.5, ly + 16, "SMTWTFS"[i], "monob", 8.5, c["muted"], 0, "middle"))
+        out.append(T(bx + 6.5, ly + 16, letters[i], "monob", 8.5, c["muted"], 0, "middle"))
 
     pw_start = date.fromisoformat(weeks[pw]["contributionDays"][0]["date"])
-    out.append(T(W - 36, ly - 10, "PEAK WEEK", "monob", 9.5, c["muted"], 1.5, "end"))
-    out.append(T(W - 36, ly + 12, f"{wt[pw]} from {pw_start.day} {pw_start.strftime('%b').lower()}", "ital", 22, c["ink"], 0, "end"))
+    out.append(T(W - 36, ly - 10, t["peak_week"]["label"].upper(), "monob", 9.5, c["muted"], 1.5, "end"))
+    pw_text = f(t["peak_week"]["text"], count=wt[pw], date=f"{pw_start.day} {pw_start.strftime('%b').lower()}")
+    out.append(T(W - 36, ly + 12, pw_text, "ital", 22, c["ink"], 0, "end"))
 
     # a closing line, in the voice of the rest of the page
     qy = ly + 40
-    quiet = st["span"] - st["active"]
     out.append(f'<line x1="36" y1="{qy}" x2="{W - 36}" y2="{qy}" stroke="{c["line"]}" stroke-dasharray="2 5"/>')
     out.append(sparkle(W / 2, qy, 8, c["mari"]))
-    out.append(T(W / 2, qy + 46, f"{st['active']} loud days, {quiet} quiet ones. some of it ships.", "ital", 28, c["soft"], 0, "middle"))
+    closing = f(t["closing"])
+    out.append(T(W / 2, qy + 46, closing, "ital", fit(closing, "ital", 28, W - 72), c["soft"], 0, "middle"))
     H = round(qy + 78)
 
     defs = """<filter id="bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.5"/></filter>"""
@@ -522,11 +535,11 @@ def activity(c, cal):
 
 # ── section heads ────────────────────────────────────────────────────────────
 
-def section(c, num, title):
-    kicker, sub = SECTIONS[title]
+def section(c, num, title, kicker, sub):
     H = 128
     nw = tw(num, "anton", 92, 1)
     tx = nw + 22
+    ts = fit(title, "ital", 76, W - tx - tw(sub, "ital", 22) - 60, -1)
     ruler = "".join(
         f'<line x1="{x}" y1="{H - 10}" x2="{x}" y2="{H - (18 if x % 80 == 0 else 14)}" stroke="{c["muted"] if x % 80 else c["ink"]}"/>'
         for x in range(0, W + 1, 8)
@@ -534,8 +547,8 @@ def section(c, num, title):
     body = f"""
 {T(0, 96, num, "anton", 92, "none", 1, extra=f' stroke="{c["verm"]}" stroke-width="1.6"')}
 {T(tx + 2, 34, kicker.upper(), "monob", 10.5, c["muted"], 2.4)}
-{T(tx - 2, 96, title, "ital", 76, c["ink"], -1)}
-{sparkle(tx + tw(title, "ital", 76, -1) + 16, 54, 11, c["mari"])}
+{T(tx - 2, 96, title, "ital", ts, c["ink"], -1)}
+{sparkle(tx + tw(title, "ital", ts, -1) + 16, 54, 11, c["mari"])}
 {T(W, 96, sub, "ital", 22, c["soft"], 0, "end")}
 <line x1="0" y1="{H - 10.5}" x2="{W}" y2="{H - 10.5}" stroke="{c["ink"]}" stroke-width="1.2"/>
 {ruler}"""
@@ -547,7 +560,7 @@ def section(c, num, title):
 GAP = 14  # gutter between cards, split across each card's inner edge
 
 
-def glyph(kind, gx, gy, col):
+def glyph(kind, gx, gy, col, label=""):
     """Line drawings in a 120px box, one per project."""
     s = f'stroke="{col}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"'
     if kind == "kanban":
@@ -629,7 +642,8 @@ def glyph(kind, gx, gy, col):
             top, bot = min(o, cl), max(o, cl)
             out.append(f'<rect x="{x}" y="{gy + top}" width="10" height="{bot - top}" rx="1.5" '
                        + (f'fill="{col}"' if cl < o else f'fill="none" {s}') + "/>")
-        out.append(T(gx + 120, gy + 118, "RISK LIMIT", "monob", 7.5, col, 1, "end"))
+        if label:
+            out.append(T(gx + 120, gy + 118, label.upper(), "monob", 7.5, col, 1, "end"))
         return "".join(out)
     if kind == "room":
         p = lambda pts: " ".join(f"{gx + x},{gy + y}" for x, y in pts)
@@ -660,13 +674,15 @@ def glyph(kind, gx, gy, col):
     return ""
 
 
-def card(idx, name, desc, tags, stock, kind, side, status):
+def card(idx, p, side, status, dot):
     """side: 'l', 'r' or 'f' (full width). Half cards carry half the gutter so two 50% images tile flush."""
     w, h = (W if side == "f" else 480), 344
     x0 = GAP / 2 + 0.5 if side == "r" else 0.5
     x1 = w - GAP / 2 - 0.5 if side == "l" else w - 0.5
     cw = x1 - x0
     bottom = h - GAP - 0.5
+    name, desc, tags, kind = p["name"], p["description"], p.get("tags", []), p["drawing"]
+    stock = COLOURS[p["colour"]]
     fill = STOCK[stock]
     txt = CREAM if stock in ("ultra", "ink") else INK
     px = x0 + 28
@@ -675,7 +691,6 @@ def card(idx, name, desc, tags, stock, kind, side, status):
     out.append(T(px, 46, f"№ {idx:02d}", "monob", 12, txt, 2))
     sx = px + tw(f"№ {idx:02d}", "monob", 12, 2) + 12
     sw = tw(status, "monob", 9.5, 1.4) + 20
-    dot = status.startswith("IN")
     out.append(f'<rect x="{sx}" y="31" width="{sw + (10 if dot else 0)}" height="22" rx="11" stroke="{txt}" stroke-opacity=".55"/>')
     if dot:
         out.append(f'<circle class="live" cx="{sx + 13}" cy="42" r="3.5" fill="{txt}"/>')
@@ -686,10 +701,10 @@ def card(idx, name, desc, tags, stock, kind, side, status):
 
     if side == "f":  # room to spare, so the drawing gets bigger and the rule stops short of it
         gs = 1.75
-        out.append(f'<g transform="translate({x1 - 140 - 120 * gs:.1f} 70) scale({gs})">{glyph(kind, 0, 0, txt)}</g>')
+        out.append(f'<g transform="translate({x1 - 140 - 120 * gs:.1f} 70) scale({gs})">{glyph(kind, 0, 0, txt, p.get("drawing_label", ""))}</g>')
         rule_end = px + 500
     else:
-        out.append(glyph(kind, x1 - 28 - 120, 74, txt))
+        out.append(glyph(kind, x1 - 28 - 120, 74, txt, p.get("drawing_label", "")))
         rule_end = x1 - 28
     ns = fit(name, "serif", 56, cw - 56 - 140, -1)
     out.append(T(px - 2, 148, name, "serif", ns, txt, -1))
@@ -714,14 +729,17 @@ def card(idx, name, desc, tags, stock, kind, side, status):
 # ── tools ────────────────────────────────────────────────────────────────────
 
 def tools(c):
+    tc = CONTENT["tools"]
+    groups = tc["groups"]
     rh, top = 92, 20
-    H = top + rh * len(TOOLS) + 18
+    H = top + rh * len(groups) + 18
     out = []
-    for i, (label, accent, items) in enumerate(TOOLS):
+    for i, g in enumerate(groups):
+        label, accent, items = g["label"], COLOURS[g["colour"]], [str(x) for x in g["items"]]
         y = top + i * rh
         base = y + 58
-        out.append(T(36, y + 36, label.upper(), "anton", 26, c[accent], 1.5))
-        out.append(T(36, y + 58, f"{len(items):02d} ENTRIES", "monob", 9.5, c["muted"], 1.6))
+        out.append(T(36, y + 36, label.upper(), "anton", fit(label.upper(), "anton", 26, 160, 1.5), c[accent], 1.5))
+        out.append(T(36, y + 58, fill(tc["count"], count=f"{len(items):02d}").upper(), "monob", 9.5, c["muted"], 1.6))
         size = 44
         while True:
             total = sum(tw(t, "ital", size) for t in items) + 34 * (len(items) - 1)
@@ -735,7 +753,7 @@ def tools(c):
             if k < len(items) - 1:
                 out.append(sparkle(x + 17, base - size * .3, 6.5, c[accent]))
                 x += 34
-        if i < len(TOOLS) - 1:
+        if i < len(groups) - 1:
             out.append(f'<line x1="36" y1="{y + rh}" x2="{W - 36}" y2="{y + rh}" stroke="{c["line"]}" stroke-dasharray="2 5"/>')
     out.append(f'<line x1="206" y1="{top + 10}" x2="206" y2="{H - 26}" stroke="{c["line"]}"/>')
     return panel(c, W, H, "\n".join(out))
@@ -747,16 +765,17 @@ def footer(c):
     H = 330
     cx, cy = W - 112, 92
     out = []
-    out.append(T(30, 190, "SLOWLY,", "anton", 172, c["ink"], 2))
-    out.append(T(W - 36, 292, "on purpose.", "ital", 150, c["verm"], -3, "end"))
+    t = CONTENT["footer"]
+    big = t["big"].upper()
+    out.append(T(30, 190, big, "anton", fit(big, "anton", 172, W - 250, 2), c["ink"], 2))
+    out.append(T(W - 36, 292, t["sign_off"], "ital", fit(t["sign_off"], "ital", 150, W - 330, -3), c["verm"], -3, "end"))
     out.append(f"""<circle cx="{cx}" cy="{cy}" r="46" stroke="{c['line']}"/>
 <circle cx="{cx}" cy="{cy}" r="28" stroke="{c['muted']}" stroke-dasharray="1 5" stroke-linecap="round"/>
 <circle cx="{cx}" cy="{cy}" r="9" fill="{c['mari']}"/>
 <g class="orbit"><circle cx="{cx + 46}" cy="{cy}" r="5" fill="{c['ink']}"/></g>
 <g class="orbit2"><circle cx="{cx}" cy="{cy - 28}" r="3" fill="{c['verm']}"/></g>""")
-    colophon = ["SET IN INSTRUMENT SERIF, ANTON", "& JETBRAINS MONO. DRAWN BY", "ASSETS/BUILD.PY, TILES DAILY."]
-    for i, line in enumerate(colophon):
-        out.append(T(36, 248 + i * 16, line, "mono", 9.5, c["muted"], 1.4))
+    for i, line in enumerate(t["colophon"][:3]):
+        out.append(T(36, 248 + i * 16, line.upper(), "mono", 9.5, c["muted"], 1.4))
     out.append(sparkle(36 + 6, 222, 6, c["mari"]))
     css = f"""
   .orbit {{ transform-origin: {cx}px {cy}px; animation: spin 20s linear infinite; }}
@@ -765,23 +784,60 @@ def footer(c):
     return panel(c, W, H, "\n".join(out), css=css)
 
 
+def pic(name, alt):
+    """A themed full-width image: dark and light variants behind one <picture>."""
+    return (f'<picture><source media="(prefers-color-scheme: dark)" srcset="assets/{name}-dark.svg">'
+            f'<img alt="{escape(alt, {chr(34): "&quot;"})}" src="assets/{name}-light.svg" width="100%"></picture>')
+
+
 def main():
     cal = fetch_calendar()
-    sections = ["now", "before", "tools"]
+    h, t, f = CONTENT["header"], CONTENT["tools"], CONTENT["footer"]
+    keep = set()
+
+    def write(name, text):
+        (OUT / name).write_text(text)
+        keep.add(name)
+
+    readme = [pic("header", f"{h['first_name']} {h['last_name']}. {h['tagline']} {h['intro']}"),
+              pic("activity", CONTENT["activity"]["alt"])]
+    heads = [(sec["title"], sec.get("kicker", ""), sec.get("subtitle", "")) for sec in CONTENT["sections"]]
+    heads.append((t["title"], t.get("kicker", ""), t.get("subtitle", "")))
     for theme, c in THEMES.items():
         for name, fn in {"header": header, "tools": tools, "footer": footer}.items():
-            (OUT / f"{name}-{theme}.svg").write_text(fn(c))
-        (OUT / f"activity-{theme}.svg").write_text(activity(c, cal))
-        for i, key in enumerate(sections, 2):
-            (OUT / f"section-{key}-{theme}.svg").write_text(section(c, f"{i:02d}", key))
+            write(f"{name}-{theme}.svg", fn(c))
+        write(f"activity-{theme}.svg", activity(c, cal))
+        for i, (title, kicker, sub) in enumerate(heads, 2):
+            write(f"section-{slug(title)}-{theme}.svg", section(c, f"{i:02d}", title, kicker, sub))
+
     # cards use fixed stock colours, so one file serves both themes
     n = 0
-    for key, items in PROJECTS.items():
-        for i, (name, repo, desc, tags, stock, kind) in enumerate(items):
+    for i, sec in enumerate(CONTENT["sections"]):
+        readme.append(pic(f"section-{slug(sec['title'])}", f"{i + 2:02d} {sec['title']}"))
+        links = []
+        items = sec["projects"]
+        for k, p in enumerate(items):
             n += 1
-            side = "f" if i == len(items) - 1 and i % 2 == 0 else "lr"[i % 2]
-            status = "IN PROGRESS" if key == "now" else "ARCHIVE"
-            (OUT / f"card-{name.replace(' ', '-')}.svg").write_text(card(n, name, desc, tags, stock, kind, side, status))
+            side = "f" if k == len(items) - 1 and k % 2 == 0 else "lr"[k % 2]
+            write(f"card-{slug(p['name'])}.svg", card(n, p, side, sec["status"].upper(), sec.get("status_dot", False)))
+            alt = escape(f"{p['name']}: {p['description']}", {chr(34): "&quot;"})
+            links.append(("<br>" if k and k % 2 == 0 else "")
+                         + f'<a href="https://github.com/{USER}/{p["repo"]}"><img alt="{alt}" '
+                         f'src="assets/card-{slug(p["name"])}.svg" width="{"100%" if side == "f" else "50%"}"></a>')
+        readme.append("<p>\n" + "".join(links) + "\n</p>")
+
+    readme.append(pic(f"section-{slug(t['title'])}", f"{len(heads) + 1:02d} {t['title']}"))
+    readme.append(pic("tools", " · ".join(", ".join(map(str, g["items"])) for g in t["groups"])))
+    readme.append("<br>")
+    readme.append(pic("footer", f"{f['big']} {f['sign_off']}"))
+    (ROOT / "README.md").write_text("<!-- generated by assets/build.py from content.yml; edit that instead -->\n\n"
+                                    + "\n\n".join(readme) + "\n")
+
+    # drop images for projects or sections that were removed from content.yml
+    for old in list(OUT.glob("card-*.svg")) + list(OUT.glob("section-*.svg")):
+        if old.name not in keep:
+            old.unlink()
+
 
 if __name__ == "__main__":
     main()

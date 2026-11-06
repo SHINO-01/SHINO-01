@@ -1,37 +1,23 @@
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/header-dark.svg"><img alt="Sakif Hussain — software engineer" src="assets/header-light.svg" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/header-dark.svg"><img alt="Sakif Hussain, software engineer. Builds small tools and quiet interfaces. I build across the stack, from browser extensions to backend services to the occasional Rust engine. I like things that are small, private by default, and quiet to use. I start more than I finish, and some of it ships." src="assets/header-light.svg" width="100%"></picture>
 
-<br>
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/activity-dark.svg"><img alt="contribution graph for the past year, with weekly totals, streaks and the busiest day" src="assets/activity-light.svg" width="100%"></picture>
 
-I build across the stack, from browser extensions to backend services to the occasional Rust engine. I like things that are small, private by default, and quiet to use. I start more than I finish, and some of it ships.
-
-<br><br>
-
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/section-activity-dark.svg"><img alt="activity" src="assets/section-activity-light.svg" width="100%"></picture>
-
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/activity-dark.svg"><img alt="contribution graph for the past year" src="assets/activity-light.svg" width="100%"></picture>
-
-<br>
-
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/section-now-dark.svg"><img alt="now" src="assets/section-now-light.svg" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/section-now-dark.svg"><img alt="02 now" src="assets/section-now-light.svg" width="100%"></picture>
 
 <p>
-<a href="https://github.com/SHINO-01/rolestash"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/card-rolestash-dark.svg"><img alt="rolestash" src="assets/card-rolestash-light.svg" width="50%"></picture></a><a href="https://github.com/SHINO-01/AutoColAvoid"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/card-autocolavoid-dark.svg"><img alt="autocolavoid" src="assets/card-autocolavoid-light.svg" width="50%"></picture></a>
+<a href="https://github.com/SHINO-01/rolestash-extension"><img alt="rolestash: a private job-application tracker" src="assets/card-rolestash.svg" width="50%"></a><a href="https://github.com/SHINO-01/deltadrift"><img alt="deltadrift: a low-latency quant trading engine in Rust" src="assets/card-deltadrift.svg" width="50%"></a><br><a href="https://github.com/SHINO-01/orbitguard"><img alt="orbitguard: spacecraft tracking, maneuvers and debris alerts" src="assets/card-orbitguard.svg" width="100%"></a>
 </p>
 
-<br>
-
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/section-before-dark.svg"><img alt="before" src="assets/section-before-light.svg" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/section-before-dark.svg"><img alt="03 before" src="assets/section-before-light.svg" width="100%"></picture>
 
 <p>
-<a href="https://github.com/SHINO-01/RTD_MONO_REPO"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/card-rtd-mono-repo-dark.svg"><img alt="rtd mono repo" src="assets/card-rtd-mono-repo-light.svg" width="50%"></picture></a><a href="https://github.com/SHINO-01/EventureAI-W3-Hackathon"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/card-eventure-ai-dark.svg"><img alt="eventure ai" src="assets/card-eventure-ai-light.svg" width="50%"></picture></a><br><a href="https://github.com/SHINO-01/SignTranslator"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/card-sign-translator-dark.svg"><img alt="sign translator" src="assets/card-sign-translator-light.svg" width="50%"></picture></a><a href="https://github.com/SHINO-01/Mod_RAG"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/card-mod-rag-dark.svg"><img alt="mod rag" src="assets/card-mod-rag-light.svg" width="50%"></picture></a>
+<a href="https://github.com/SHINO-01/EventureAI-W3-Hackathon"><img alt="eventure ai: a multi-agent trip planner" src="assets/card-eventure-ai.svg" width="50%"></a><a href="https://github.com/SHINO-01/Three.js_TV_Room"><img alt="tv room: a living room in Three.js" src="assets/card-tv-room.svg" width="50%"></a><br><a href="https://github.com/SHINO-01/Demon-Slayer-Game"><img alt="demon slayer: a 2D action game in C and OpenGL" src="assets/card-demon-slayer.svg" width="50%"></a><a href="https://github.com/SHINO-01/W3_Assignment_07"><img alt="site checks: automated website testing with Selenium" src="assets/card-site-checks.svg" width="50%"></a>
 </p>
 
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/section-tools-dark.svg"><img alt="04 tools" src="assets/section-tools-light.svg" width="100%"></picture>
+
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/tools-dark.svg"><img alt="typescript, python, rust, go · react, fastapi, django, flask · postgres, timescaledb · crewai, rag pipelines, multi-agent systems" src="assets/tools-light.svg" width="100%"></picture>
+
 <br>
-
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/section-tools-dark.svg"><img alt="tools" src="assets/section-tools-light.svg" width="100%"></picture>
-
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/tools-dark.svg"><img alt="typescript, python, rust, go · react, fastapi, django, flask · postgres, timescaledb · crewai, rag, multi-agent systems" src="assets/tools-light.svg" width="100%"></picture>
-
-<br><br>
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/footer-dark.svg"><img alt="slowly, on purpose." src="assets/footer-light.svg" width="100%"></picture>

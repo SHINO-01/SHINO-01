@@ -671,6 +671,83 @@ def glyph(kind, gx, gy, col, label=""):
                        f'<path d="M{gx + 13} {y - 4} l8 8 m0 -8 l-8 8" {s}/>')
             out.append(f'<rect x="{gx + 32}" y="{y - 3}" width="{70 - k * 9}" height="6" rx="3" fill="{col}" opacity="{1 if ok else .35}"/>')
         return "".join(out)
+
+    # space tech
+    if kind == "rocket":
+        stars = "".join(sparkle(gx + x, gy + y, r, col) for x, y, r in [(14, 22, 5), (104, 96, 4), (22, 92, 3)])
+        return f"""{stars}<g transform="rotate(32 {gx + 60} {gy + 60}) translate({gx + 60} {gy + 58}) scale(1.14) translate({-gx - 60} {-gy - 58})">
+<path d="M{gx + 60} {gy + 2} C{gx + 73} {gy + 16} {gx + 77} {gy + 38} {gx + 74} {gy + 74} H{gx + 46} C{gx + 43} {gy + 38} {gx + 47} {gy + 16} {gx + 60} {gy + 2}Z" {s}/>
+<circle cx="{gx + 60}" cy="{gy + 36}" r="7" {s}/>
+<path d="M{gx + 46} {gy + 54} L{gx + 32} {gy + 80} L{gx + 46} {gy + 76}Z M{gx + 74} {gy + 54} L{gx + 88} {gy + 80} L{gx + 74} {gy + 76}Z" fill="{col}"/>
+<path d="M{gx + 50} {gy + 78} Q{gx + 60} {gy + 120} {gx + 70} {gy + 78}Z" fill="{col}"/>
+<path d="M{gx + 50} {gy + 116} v6 M{gx + 60} {gy + 120} v8 M{gx + 70} {gy + 116} v6" {s} stroke-dasharray="2 3"/></g>"""
+    if kind == "satellite":
+        panel = lambda x: (f'<rect x="{gx + x}" y="{gy + 52}" width="36" height="18" rx="2" {s}/>'
+                           + "".join(f'<line x1="{gx + x + 9 * k}" y1="{gy + 52}" x2="{gx + x + 9 * k}" y2="{gy + 70}" {s}/>' for k in (1, 2, 3)))
+        waves = "".join(f'<path d="M{gx + 76 + r * .7:.1f} {gy + 22 - r * .7:.1f} A{r} {r} 0 0 1 {gx + 76 + r:.1f} {gy + 22:.1f}" {s} opacity="{o}"/>'
+                        for r, o in [(12, 1), (22, .6), (32, .3)])
+        return f"""<g transform="rotate(-18 {gx + 60} {gy + 60})">{panel(4)}{panel(80)}
+<line x1="{gx + 40}" y1="{gy + 61}" x2="{gx + 48}" y2="{gy + 61}" {s}/><line x1="{gx + 72}" y1="{gy + 61}" x2="{gx + 80}" y2="{gy + 61}" {s}/>
+<rect x="{gx + 48}" y="{gy + 48}" width="24" height="26" rx="3" fill="{col}"/>
+<line x1="{gx + 60}" y1="{gy + 48}" x2="{gx + 60}" y2="{gy + 36}" {s}/>
+<path d="M{gx + 45} {gy + 26} Q{gx + 60} {gy + 48} {gx + 75} {gy + 26}Z" fill="{col}"/><line x1="{gx + 60}" y1="{gy + 32}" x2="{gx + 60}" y2="{gy + 18}" {s}/><circle cx="{gx + 60}" cy="{gy + 17}" r="2.5" fill="{col}"/>
+<path d="M{gx + 52} {gy + 74} l-4 10 h24 l-4 -10" {s}/></g>{waves}"""
+    if kind == "rover":
+        wheels = "".join(f'<circle cx="{gx + x}" cy="{gy + 94}" r="10" {s}/><circle cx="{gx + x}" cy="{gy + 94}" r="3" fill="{col}"/>' for x in (24, 60, 96))
+        return f"""<line x1="{gx}" y1="{gy + 105}" x2="{gx + 120}" y2="{gy + 105}" {s} stroke-dasharray="2 4"/>
+<rect x="{gx + 22}" y="{gy + 50}" width="70" height="22" rx="4" {s}/>
+<rect x="{gx + 26}" y="{gy + 42}" width="44" height="6" rx="1.5" fill="{col}"/>
+<polyline points="{gx + 24},{gy + 94} {gx + 40},{gy + 76} {gx + 60},{gy + 94}" {s} fill="none"/>
+<polyline points="{gx + 40},{gy + 76} {gx + 78},{gy + 76} {gx + 96},{gy + 94}" {s} fill="none"/>
+<line x1="{gx + 82}" y1="{gy + 50}" x2="{gx + 82}" y2="{gy + 24}" {s}/>
+<rect x="{gx + 72}" y="{gy + 12}" width="26" height="13" rx="3" fill="{col}"/><circle cx="{gx + 92}" cy="{gy + 18.5}" r="2.5" fill="none" stroke="{col}"/>
+<path d="M{gx + 100} {gy + 16} l14 -6 M{gx + 100} {gy + 21} l14 2" {s} stroke-dasharray="2 3"/>{wheels}"""
+
+    # robotics
+    if kind == "arm":
+        return f"""<line x1="{gx}" y1="{gy + 116}" x2="{gx + 120}" y2="{gy + 116}" {s}/>
+<path d="M{gx + 14} {gy + 116} L{gx + 20} {gy + 100} H{gx + 48} L{gx + 54} {gy + 116}" {s}/>
+<line x1="{gx + 34}" y1="{gy + 98}" x2="{gx + 26}" y2="{gy + 52}" stroke="{col}" stroke-width="8" stroke-linecap="round"/>
+<line x1="{gx + 26}" y1="{gy + 52}" x2="{gx + 78}" y2="{gy + 30}" stroke="{col}" stroke-width="6" stroke-linecap="round"/>
+<circle cx="{gx + 34}" cy="{gy + 98}" r="7" fill="{col}"/><circle cx="{gx + 26}" cy="{gy + 52}" r="9" {s}/><circle cx="{gx + 78}" cy="{gy + 30}" r="6" {s}/>
+<path d="M{gx + 84} {gy + 30} l8 2 v14 M{gx + 84} {gy + 30} l14 -6 l6 10" {s}/>
+<rect x="{gx + 90}" y="{gy + 50}" width="20" height="20" rx="2" fill="{col}"/>
+<path d="M{gx + 100} {gy + 76} V{gy + 104} H{gx + 70}" {s} stroke-dasharray="2 4"/>
+<rect x="{gx + 60}" y="{gy + 98}" width="10" height="10" rx="1.5" {s}/>"""
+    if kind == "drone":
+        rotors = "".join(f'<line x1="{gx + 60}" y1="{gy + 58}" x2="{gx + x}" y2="{gy + y}" stroke="{col}" stroke-width="3" stroke-linecap="round"/>'
+                         f'<ellipse cx="{gx + x}" cy="{gy + y - 4}" rx="18" ry="4.5" {s}/><circle cx="{gx + x}" cy="{gy + y - 4}" r="2.5" fill="{col}"/>'
+                         for x, y in [(18, 34), (102, 34), (30, 70), (90, 70)])
+        return f"""{rotors}<rect x="{gx + 46}" y="{gy + 48}" width="28" height="20" rx="6" fill="{col}"/>
+<circle cx="{gx + 60}" cy="{gy + 74}" r="4" {s}/>
+<path d="M{gx + 52} {gy + 84} L{gx + 38} {gy + 116} M{gx + 60} {gy + 84} V{gy + 118} M{gx + 68} {gy + 84} L{gx + 82} {gy + 116}" {s} stroke-dasharray="2 4"/>"""
+
+    # agrotech
+    if kind == "sprout":
+        soil = "".join(f'<circle cx="{gx + x}" cy="{gy + y}" r="1.6" fill="{col}"/>' for x, y in [(10, 112), (28, 116), (46, 111), (70, 115), (88, 112), (112, 116)])
+        waves = "".join(f'<path d="M{gx + 101 - r} {gy + 58 - r * .6:.1f} Q{gx + 101} {gy + 58 - r * 1.3:.1f} {gx + 101 + r} {gy + 58 - r * .6:.1f}" {s} opacity="{o}"/>'
+                        for r, o in [(6, 1), (11, .6), (16, .3)])
+        return f"""<path d="M{gx} {gy + 104} Q{gx + 40} {gy + 96} {gx + 60} {gy + 100} T{gx + 120} {gy + 104}" {s}/>{soil}
+<path d="M{gx + 52} {gy + 100} C{gx + 52} {gy + 84} {gx + 48} {gy + 70} {gx + 52} {gy + 52}" {s}/>
+<path d="M{gx + 51} {gy + 70} C{gx + 32} {gy + 68} {gx + 18} {gy + 54} {gx + 18} {gy + 36} C{gx + 36} {gy + 38} {gx + 50} {gy + 52} {gx + 51} {gy + 70}Z" fill="{col}"/>
+<path d="M{gx + 52} {gy + 56} C{gx + 66} {gy + 52} {gx + 78} {gy + 38} {gx + 78} {gy + 20} C{gx + 62} {gy + 22} {gx + 52} {gy + 36} {gx + 52} {gy + 56}Z" {s}/>
+<path d="M{gx + 53} {gy + 54} L{gx + 70} {gy + 30}" {s}/>
+<line x1="{gx + 101}" y1="{gy + 112}" x2="{gx + 101}" y2="{gy + 72}" {s}/><rect x="{gx + 94}" y="{gy + 62}" width="14" height="10" rx="2" fill="{col}"/>{waves}"""
+    if kind == "field":
+        rows = []
+        for k in range(7):
+            bx = k * 20
+            tx_ = 60 + (bx - 60) * .2
+            rows.append(f'<line x1="{gx + bx}" y1="{gy + 118}" x2="{gx + tx_:.1f}" y2="{gy + 50}" {s} stroke-dasharray="{"3 3" if k % 2 else "1 4"}"/>')
+            for j, t in enumerate((.15, .45)):
+                x, y = bx + (tx_ - bx) * t, 118 - 68 * t
+                r = 5 - j * 2
+                rows.append(f'<path d="M{gx + x - r:.1f} {gy + y - r:.1f} L{gx + x:.1f} {gy + y:.1f} L{gx + x + r:.1f} {gy + y - r:.1f}" {s}/>')
+        rays = "".join(f'<line x1="{gx + 92 + 15 * math.cos(math.radians(a)):.1f}" y1="{gy + 20 + 15 * math.sin(math.radians(a)):.1f}" '
+                       f'x2="{gx + 92 + 21 * math.cos(math.radians(a)):.1f}" y2="{gy + 20 + 21 * math.sin(math.radians(a)):.1f}" {s}/>' for a in range(0, 360, 45))
+        return f"""<line x1="{gx}" y1="{gy + 50}" x2="{gx + 120}" y2="{gy + 50}" {s}/>{"".join(rows)}
+<circle cx="{gx + 92}" cy="{gy + 20}" r="10" fill="{col}"/>{rays}
+<path d="M{gx + 10} {gy + 30} q6 -6 12 0 q6 -6 12 0" {s}/>"""
     return ""
 
 

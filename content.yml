@@ -8,7 +8,11 @@
 # write them however you like.
 #
 # Colours:  red, yellow, green, blue, pink, black
-# Drawings: kanban, candles, orbit, network, room, sword, browser, tree, hand, rag
+# Drawings, for a project's `drawing:`
+#   software:  kanban, candles, network, browser, tree, rag, room, sword, hand
+#   space:     orbit, rocket, satellite, rover
+#   robotics:  arm, drone, rover
+#   agrotech:  sprout, field, drone
 
 user: SHINO-01  # the GitHub account whose contributions are drawn
 

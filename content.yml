@@ -20,7 +20,7 @@ user: SHINO-01  # the GitHub account whose contributions are drawn
 header:
   masthead:
     left: SHINO-01 / field notes
-    middle: software · systems · small tools
+    middle: software · systems · tools
     right: New South Wales
   first_name: Sakif
   last_name: Hussain
@@ -29,7 +29,7 @@ header:
     top: LEO
     bottom: MEO
     centre: T-00:00
-  tagline: software engineer — builds small tools & quiet interfaces.
+  tagline: AI and software engineer; builds software of tomorrow.
   intro: >-
     I build across the stack, from browser extensions to backend services to the
     occasional Rust engine. I like things that are small, private by default, and

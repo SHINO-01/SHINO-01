@@ -25,7 +25,7 @@
 </defs>
 <g clip-path="url(#sheet)">
 <rect x="0.5" y="0.5" width="959.0" height="703.0" fill="#f5eddd"/>
-<text x="36.0" y="40.0" class="monob" font-size="11" fill="#1a1612" letter-spacing="2.2">SHINO-01 / FIELD NOTES</text><text x="480.0" y="40.0" class="mono" font-size="11" fill="#8b7e6b" letter-spacing="2.2" text-anchor="middle">SOFTWARE · SYSTEMS · SMALL TOOLS</text><text x="924.0" y="40.0" class="mono" font-size="11" fill="#8b7e6b" letter-spacing="2.2" text-anchor="end">NEW SOUTH WALES</text><line x1="36" y1="54" x2="924" y2="54" stroke="#1a1612" stroke-width="1.6"/><line x1="36" y1="58.5" x2="924" y2="58.5" stroke="#1a1612" stroke-width=".6"/>
+<text x="36.0" y="40.0" class="monob" font-size="11" fill="#1a1612" letter-spacing="2.2">SHINO-01 / FIELD NOTES</text><text x="480.0" y="40.0" class="mono" font-size="11" fill="#8b7e6b" letter-spacing="2.2" text-anchor="middle">SOFTWARE · SYSTEMS · TOOLS</text><text x="924.0" y="40.0" class="mono" font-size="11" fill="#8b7e6b" letter-spacing="2.2" text-anchor="end">NEW SOUTH WALES</text><line x1="36" y1="54" x2="924" y2="54" stroke="#1a1612" stroke-width="1.6"/><line x1="36" y1="58.5" x2="924" y2="58.5" stroke="#1a1612" stroke-width=".6"/>
 <text x="30.0" y="392.0" class="anton" font-size="150" fill="#e4431f" letter-spacing="2">HUSSAIN</text>
 <text x="22.0" y="250.0" class="ital" font-size="210" fill="#1a1612" letter-spacing="-4">Sakif</text>
 <path d="M533.81 286 C536.3299999999999 297.48 536.3299999999999 297.48 547.81 300 C536.3299999999999 302.52 536.3299999999999 302.52 533.81 314 C531.29 302.52 531.29 302.52 519.81 300 C531.29 297.48 531.29 297.48 533.81 286Z" fill="#d98f0c"/>
@@ -48,8 +48,8 @@
 <text x="650.0" y="332.0" class="monob" font-size="9.5" fill="#3149d6" letter-spacing="1.5">MEO</text>
 <text x="772.0" y="350.0" class="monob" font-size="10" fill="#8b7e6b" letter-spacing="1.5" text-anchor="middle">T-00:00</text>
 <line x1="36" y1="426" x2="84" y2="426" stroke="#e4431f" stroke-width="3"/>
-<text x="36.0" y="460.0" class="ital" font-size="34" fill="#1a1612">software engineer — builds small tools &amp;</text>
-<text x="36.0" y="498.0" class="ital" font-size="34" fill="#1a1612">quiet interfaces.</text>
+<text x="36.0" y="460.0" class="ital" font-size="34" fill="#1a1612">AI and software engineer; builds software of</text>
+<text x="36.0" y="498.0" class="ital" font-size="34" fill="#1a1612">tomorrow.</text>
 <text x="36.0" y="540.0" class="mono" font-size="12.5" fill="#4b4238">I build across the stack, from browser extensions to backend services to</text>
 <text x="36.0" y="560.0" class="mono" font-size="12.5" fill="#4b4238">the occasional Rust engine. I like things that are small, private by</text>
 <text x="36.0" y="580.0" class="mono" font-size="12.5" fill="#4b4238">default, and quiet to use. I start more than I finish, and some of it</text>

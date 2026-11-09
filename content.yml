@@ -20,31 +20,31 @@ user: SHINO-01  # the GitHub account whose contributions are drawn
 header:
   masthead:
     left: SHINO-01 / field notes
-    middle: software · systems · tools
+    middle: Software · Systems · Tools
     right: New South Wales
   first_name: Sakif
   last_name: Hussain
-  ring: i make things i know i won't finish anytime soon   # runs around the dial
+  ring: ::::======SHINO-01======:::: ||| ::::======SHINO-01======::::   # runs around the dial
   dial:
-    top: LEO
-    bottom: MEO
-    centre: T-00:00
-  tagline: AI and software engineer; builds software of tomorrow.
+    top: LUNA
+    bottom: SOL
+    centre: T+11:00
+  tagline: AI and software engineer; building software of tomorrow.
   intro: >-
-    I build across the stack, from browser extensions to backend services to the
-    occasional Rust engine. I like things that are small, private by default, and
-    quiet to use. I start more than I finish, and some of it ships.
+    I build across the stack, from browser extensions to backend services to full-stack software.
+    I like Secure tech, Maintainable by default, and
+    serve a purpose. I start more than I finish, and some of it ships.
   caption:
     label: fig. 0
     text: orbit of attention, not to scale
   ticker:  # the scrolling band along the bottom of the header
-    - browser extensions
-    - backend services
-    - the occasional rust engine
-    - small
-    - private by default
-    - quiet to use
-    - start more, finish some
+    - AgTech
+    - SpaceTech
+    - AISec
+    - Solving complex problems
+    - Backend Biased
+    - Full-stack softwares
+    - start more, ship some
 
 
 activity:
@@ -151,7 +151,7 @@ sections:
 tools:
   title: tools
   kicker: in the drawer
-  subtitle: what's usually open in another tab
+  subtitle: My go-to tech stack
   count: "{count} entries"
   groups:
     - label: languages
@@ -169,9 +169,9 @@ tools:
 
 
 footer:
-  big: slowly,
-  sign_off: on purpose.
+  big: passion,
+  sign_off: with intent.
   colophon:
     - set in instrument serif, anton
-    - "& jetbrains mono. drawn by"
+    - "& JetBrains Mono. drawn by"
     - assets/build.py, tiles daily.

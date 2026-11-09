@@ -22,4 +22,4 @@
 
 <br>
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/footer-dark.svg"><img alt="passion, with intent." src="assets/footer-light.svg" width="100%"></picture>
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/footer-dark.svg"><img alt="forward, with intent." src="assets/footer-light.svg" width="100%"></picture>

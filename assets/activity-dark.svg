@@ -29,7 +29,7 @@
 <rect x="0.5" y="0.5" width="959.0" height="1107.0" fill="#16130f"/>
 <text x="36.0" y="40.0" class="monob" font-size="11" fill="#f4ecdc" letter-spacing="2.2">№ 01 — ACTIVITY</text><text x="924.0" y="40.0" class="mono" font-size="11" fill="#8a7f6e" letter-spacing="2.2" text-anchor="end">AS OF 09 NOV 2026</text><line x1="36" y1="54" x2="924" y2="54" stroke="#f4ecdc" stroke-width="1.6"/><line x1="36" y1="58.5" x2="924" y2="58.5" stroke="#f4ecdc" stroke-width=".6"/>
 <text x="36.0" y="98.0" class="monob" font-size="10.5" fill="#8a7f6e" letter-spacing="2">FIG. 1 — THE YEAR IN TILES</text>
-<text x="30.0" y="266.0" class="anton" font-size="176" fill="#f5b53f" letter-spacing="1">808</text>
+<text x="30.0" y="266.0" class="anton" font-size="176" fill="#f5b53f" letter-spacing="1">809</text>
 <text x="315.9" y="204.0" class="ital" font-size="40" fill="#f4ecdc">contributions,</text>
 <text x="315.9" y="246.0" class="ital" font-size="40" fill="#cbbfa8">in the past year.</text>
 <path d="M321.8848 130 C323.6848 138.2 323.6848 138.2 331.8848 140 C323.6848 141.8 323.6848 141.8 321.8848 150 C320.0848 141.8 320.0848 141.8 311.8848 140 C320.0848 138.2 320.0848 138.2 321.8848 130Z" fill="#ff5d3a"/>
@@ -169,7 +169,7 @@
 <rect class="bar" style="animation-delay:1084ms" x="770.69" y="644.83" width="25.91" height="31.11" rx="2.5" fill="#ff5d3a"><title>102 that week</title></rect>
 <rect class="bar" style="animation-delay:1100ms" x="801.54" y="652.69" width="25.91" height="23.26" rx="2.5" fill="#2f7a5c"><title>57 that week</title></rect>
 <rect class="bar" style="animation-delay:1116ms" x="832.39" y="648.39" width="25.91" height="27.55" rx="2.5" fill="#5ec897"><title>80 that week</title></rect>
-<rect class="bar" style="animation-delay:1132ms" x="863.24" y="655.51" width="25.91" height="20.43" rx="2.5" fill="#5ec897"><title>44 that week</title></rect>
+<rect class="bar" style="animation-delay:1132ms" x="863.24" y="655.28" width="25.91" height="20.67" rx="2.5" fill="#5ec897"><title>45 that week</title></rect>
 <rect x="58" y="679.946348733234" width="878" height="261.946348733234" rx="16" fill="#1f1b16" stroke="#3b342c"/>
 <path d="M52 679.946348733234 h-10 M58 673.946348733234 v-10" stroke="#8a7f6e"/>
 <path d="M942 679.946348733234 h10 M936 673.946348733234 v-10" stroke="#8a7f6e"/>
@@ -219,7 +219,7 @@
 <g class="col" style="animation-delay:686ms"><rect x="770.69" y="713.95" width="25.91" height="25.91" rx="5" fill="#2f7a5c"><title>8 on 2026-10-18</title></rect><rect x="770.69" y="744.80" width="25.91" height="25.91" rx="5" fill="#ff5d3a"><title>61 on 2026-10-19</title></rect><text x="783.6" y="761.2" class="monob" font-size="9.5" fill="#15120f" text-anchor="middle">61</text><rect x="770.69" y="775.65" width="25.91" height="25.91" rx="5" fill="#2f7a5c"><title>15 on 2026-10-20</title></rect><rect x="770.69" y="806.49" width="25.91" height="25.91" rx="5" fill="#2f7a5c"><title>5 on 2026-10-21</title></rect><rect x="770.69" y="837.34" width="25.91" height="25.91" rx="5" fill="#2f7a5c"><title>1 on 2026-10-22</title></rect><rect x="770.69" y="868.19" width="25.91" height="25.91" rx="5" fill="#2f7a5c"><title>9 on 2026-10-23</title></rect><rect x="770.69" y="899.04" width="25.91" height="25.91" rx="5" fill="#2f7a5c"><title>3 on 2026-10-24</title></rect></g>
 <g class="col" style="animation-delay:700ms"><rect x="801.54" y="713.95" width="25.91" height="25.91" rx="5" fill="#2f7a5c"><title>2 on 2026-10-25</title></rect><rect x="801.54" y="744.80" width="25.91" height="25.91" rx="5" fill="#2e2924"><title>0 on 2026-10-26</title></rect><circle cx="814.49" cy="757.75" r="1.3" fill="#8a7f6e" opacity=".45"/><rect x="801.54" y="775.65" width="25.91" height="25.91" rx="5" fill="#2f7a5c"><title>16 on 2026-10-27</title></rect><rect x="801.54" y="806.49" width="25.91" height="25.91" rx="5" fill="#2f7a5c"><title>5 on 2026-10-28</title></rect><rect x="801.54" y="837.34" width="25.91" height="25.91" rx="5" fill="#2f7a5c"><title>2 on 2026-10-29</title></rect><rect x="801.54" y="868.19" width="25.91" height="25.91" rx="5" fill="#2f7a5c"><title>14 on 2026-10-30</title></rect><rect x="801.54" y="899.04" width="25.91" height="25.91" rx="5" fill="#2f7a5c"><title>18 on 2026-10-31</title></rect></g>
 <g class="col" style="animation-delay:714ms"><rect x="832.39" y="713.95" width="25.91" height="25.91" rx="5" fill="#2f7a5c"><title>2 on 2026-11-01</title></rect><rect x="832.39" y="744.80" width="25.91" height="25.91" rx="5" fill="#5ec897"><title>34 on 2026-11-02</title></rect><rect x="832.39" y="775.65" width="25.91" height="25.91" rx="5" fill="#2f7a5c"><title>2 on 2026-11-03</title></rect><rect x="832.39" y="806.49" width="25.91" height="25.91" rx="5" fill="#2f7a5c"><title>5 on 2026-11-04</title></rect><rect x="832.39" y="837.34" width="25.91" height="25.91" rx="5" fill="#2e2924"><title>0 on 2026-11-05</title></rect><circle cx="845.34" cy="850.30" r="1.3" fill="#8a7f6e" opacity=".45"/><rect x="832.39" y="868.19" width="25.91" height="25.91" rx="5" fill="#5ec897"><title>32 on 2026-11-06</title></rect><rect x="832.39" y="899.04" width="25.91" height="25.91" rx="5" fill="#2f7a5c"><title>5 on 2026-11-07</title></rect></g>
-<g class="col" style="animation-delay:728ms"><rect x="863.24" y="713.95" width="25.91" height="25.91" rx="5" fill="#5ec897"><title>33 on 2026-11-08</title></rect><rect x="863.24" y="744.80" width="25.91" height="25.91" rx="5" fill="#2f7a5c"><title>11 on 2026-11-09</title></rect></g>
+<g class="col" style="animation-delay:728ms"><rect x="863.24" y="713.95" width="25.91" height="25.91" rx="5" fill="#5ec897"><title>33 on 2026-11-08</title></rect><rect x="863.24" y="744.80" width="25.91" height="25.91" rx="5" fill="#2f7a5c"><title>12 on 2026-11-09</title></rect></g>
 <rect x="860.24" y="741.80" width="31.91" height="31.91" rx="7" stroke="#f4ecdc" stroke-width="1.6"/>
 <text x="891.2" y="788.7" class="monob" font-size="8.5" fill="#f4ecdc" letter-spacing="1.2" text-anchor="end">TODAY</text>
 <rect x="482.8" y="613.946348733234" width="250.6" height="44" fill="#16130f"/>
@@ -237,7 +237,7 @@
 <text x="340.0" y="989.9" class="monob" font-size="9.5" fill="#8a7f6e" letter-spacing="1.5">RHYTHM</text>
 <rect x="414" y="981.1" width="13" height="10.8" rx="2" fill="#5cb88f"/>
 <text x="420.5" y="1005.9" class="monob" font-size="8.5" fill="#8a7f6e" text-anchor="middle">S</text>
-<rect x="436" y="970.9" width="13" height="21.0" rx="2" fill="#5cb88f"/>
+<rect x="436" y="970.7" width="13" height="21.2" rx="2" fill="#5cb88f"/>
 <text x="442.5" y="1005.9" class="monob" font-size="8.5" fill="#8a7f6e" text-anchor="middle">M</text>
 <rect x="458" y="973.4" width="13" height="18.5" rx="2" fill="#5cb88f"/>
 <text x="464.5" y="1005.9" class="monob" font-size="8.5" fill="#8a7f6e" text-anchor="middle">T</text>

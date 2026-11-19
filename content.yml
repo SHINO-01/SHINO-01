@@ -113,8 +113,14 @@ sections:
         repo: orbitguard
         description: Tracking and maneuver computation for spacecraft on in-orbit missions, with collision alerts when debris gets too close.
         tags: [orbital mechanics, debris alerts]
-        colour: green
+        colour: black
         drawing: orbit
+      - name: arcadia
+        repo: ARCADIA
+        description: Agricultural digital twin & autonomous fleet platform that uses a mathematically accurate, physics-aware world model.
+        tags: [Agriculture, Robotics, Simulation]
+        colour: green
+        drawing: field
 
   - title: before
     kicker: from the archive
